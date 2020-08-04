@@ -1,0 +1,14 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+  - win_domain_membership:
+      dns_domain_name: cooktest.dev
+      hostname: "{{ ansible_fqdn }}"
+      domain_admin_user: css-vra-svc-d@cooktest.dev
+      domain_admin_password: C0mplex!
+      domain_ou_path: "OU=ADCertificateServices,OU=CookTestServers,DC=Cooktest,DC=dev"
+      state: domain
+    register: domain_state
+
+  - win_reboot:
+    when: domain_state.reboot_required
